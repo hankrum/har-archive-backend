@@ -11,7 +11,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
-      - ConnectionStrings__UserManagementCommandConnection=Server=sql;Database=DS.UserManagement;User=sa;Password=Your_password123;
+      - ConnectionStrings__HarFilesContext=Server=sql;Database=HarFiles;User=sa;Password=Your_password123;
     ports:
       - "80"
       - "443"
