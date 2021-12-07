@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using System;
 
 namespace Har.Archive.Backend.Api
 {
@@ -7,8 +9,19 @@ namespace Har.Archive.Backend.Api
     {
         public static void Main(string[] args)
         {
-            // TODO: add exceptions logging
-            CreateHostBuilder(args).Build().Run();
+            try
+            {
+                CreateHostBuilder(args).Build().Run();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"Har.Archive.Backend.Api failed to start with {exception.Message}", exception);
+                Log.Fatal($"Har.Archive.Backend.Api failed to start with {exception.Message}", exception);
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

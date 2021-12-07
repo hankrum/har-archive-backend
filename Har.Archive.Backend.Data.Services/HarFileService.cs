@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dto = Har.Archive.Backend.Data.Services.DtoModels;
 
 namespace Har.Archive.Backend.Data.Services
 {
@@ -28,7 +27,7 @@ namespace Har.Archive.Backend.Data.Services
                 .All()
                 .ToListAsync();
 
-            var harFilesDto = harFilesQuery.Select(harFile => mapper.Map<Dto.HarFile>(harFile));
+            var harFilesDto = harFilesQuery.Select(harFile => mapper.Map<HarFile>(harFile));
 
             return harFilesDto;
         }

@@ -15,3 +15,6 @@ services:
       - sql
     networks:
       - app-tier
+networks:
+  app-tier:
+    driver: bridge

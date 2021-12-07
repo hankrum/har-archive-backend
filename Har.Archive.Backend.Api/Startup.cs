@@ -1,3 +1,4 @@
+using Har.Archive.Backend.Api.Mappers;
 using Har.Archive.Backend.Data;
 using Har.Archive.Backend.Data.Services;
 using Microsoft.AspNetCore.Builder;
@@ -6,11 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace Har.Archive.Backend.Api
 {
     public class Startup
     {
+        private static readonly string ApplicationName = typeof(Program).Assembly.GetName().Name;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,6 +41,12 @@ namespace Har.Archive.Backend.Api
 
             services.AddScoped(typeof(IEfRepository<>), typeof(EFRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddAutoMapper(typeof(HarArchiveMapperProfile));
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = ApplicationName, Version = "v1" });
+            });
         }
 
         private void RegisterServices(IServiceCollection services)
@@ -51,6 +61,12 @@ namespace Har.Archive.Backend.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "HAR File Archive");
+            });
 
             app.UseHttpsRedirection();
 
