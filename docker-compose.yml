@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  sql:
+    image: "mcr.microsoft.com/mssql/server"
+    networks:
+      - app-tier
+
+  har.archive.backend.api:
+    image: ${DOCKER_REGISTRY-}hararchivebackendapi
+    build:
+      context: .
+      dockerfile: Har.Archive.Backend.Api/Dockerfile
+    depends_on:
+      - sql
+    networks:
+      - app-tier
