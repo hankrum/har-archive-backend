@@ -35,7 +35,7 @@ namespace Har.Archive.Backend.Api
         {
             services.AddDbContext<MsSqlDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("HarFilesContext"),
-                b => b.MigrationsAssembly("Har.Archive.Backend.Api")));
+                b => b.MigrationsAssembly("Har.Archive.Backend.Data.Services")));
 
             services.BuildServiceProvider().GetService<MsSqlDbContext>().Database.Migrate();
 
@@ -57,6 +57,12 @@ namespace Har.Archive.Backend.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<MsSqlDbContext>();
+                context.Database.Migrate();
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

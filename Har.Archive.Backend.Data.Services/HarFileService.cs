@@ -25,6 +25,7 @@ namespace Har.Archive.Backend.Data.Services
             var harFilesQuery = await unitOfWork
                 .HarFiles
                 .All()
+                .Include(harFile => harFile.Folder)
                 .ToListAsync();
 
             var harFilesDto = harFilesQuery.Select(harFile => mapper.Map<HarFile>(harFile));

@@ -2,9 +2,12 @@ version: '3.4'
 
 services:
   sql:
-    image: "mcr.microsoft.com/mssql/server"
-    networks:
-      - app-tier
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment:
+      - SA_PASSWORD=Your_password123
+      - ACCEPT_EULA=Y
+    ports:
+      - "5433:1433"
 
   har.archive.backend.api:
     image: ${DOCKER_REGISTRY-}hararchivebackendapi
@@ -13,8 +16,3 @@ services:
       dockerfile: Har.Archive.Backend.Api/Dockerfile
     depends_on:
       - sql
-    networks:
-      - app-tier
-networks:
-  app-tier:
-    driver: bridge

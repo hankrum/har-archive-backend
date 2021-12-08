@@ -9,6 +9,7 @@ namespace Har.Archive.Backend.Api.Mappers
         public HarArchiveMapperProfile()
         {
             CreateMap<Domain.HarFile, Dto.HarFile>();
+            CreateMap<Domain.Folder, Dto.Folder>();
         }
     }
 }

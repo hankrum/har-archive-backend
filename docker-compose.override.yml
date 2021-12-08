@@ -7,11 +7,12 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - "5433:1433"
+
   har.archive.backend.api:
     environment:
+      - CONNECTIONSTRINGS__HarFilesContext=Server=sql;Database=HarFilesDatabase;User=sa;Password=Your_password123;
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
-      - ConnectionStrings__HarFilesContext=Server=sql;Database=HarFiles;User=sa;Password=Your_password123;
     ports:
       - "80"
       - "443"
