@@ -25,12 +25,13 @@ namespace Har.Archive.Backend.Data.Services.Services
             this.pathService = Guard.GetNotNullArgument(pathService, nameof(pathService));
         }
 
-        public async Task<IEnumerable<Dto.HarFile>> All()
+        public async Task<IEnumerable<Dto.HarFile>> All(string path)
         {
             var harFilesQuery = await unitOfWork
                 .HarFiles
                 .All()
                 .Include(harFile => harFile.Path)
+                .Where(harFile => harFile.Path.Text == path)
                 .ToListAsync();
 
             var harFilesDto = harFilesQuery.Select(harFile => mapper.Map<Dto.HarFile>(harFile));

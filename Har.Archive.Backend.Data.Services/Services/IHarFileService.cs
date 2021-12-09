@@ -6,7 +6,7 @@ namespace Har.Archive.Backend.Data.Services.Services
 {
     public interface IHarFileService
     {
-        Task<IEnumerable<Dto.HarFile>> All();
+        Task<IEnumerable<Dto.HarFile>> AllByPath(string path);
 
         Task Create(Dto.HarFile harFile);
 

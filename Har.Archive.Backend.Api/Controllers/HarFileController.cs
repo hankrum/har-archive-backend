@@ -21,7 +21,7 @@ namespace Har.Archive.Backend.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HarFile>>> Get()
+        public async Task<ActionResult<IEnumerable<HarFile>>> Get(string path)
         {
             // TODO: pagination and sorting
             var result = await this.harFileService.All();
