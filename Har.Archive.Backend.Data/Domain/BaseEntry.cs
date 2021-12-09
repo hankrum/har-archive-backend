@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Har.Archive.Backend.Data.Domain
 {
     public abstract class BaseEntry : IDeletable, IAuditable
     {
+        [Key]
         public long Id { get; set; }
 
         public bool IsDeleted { get; set; }

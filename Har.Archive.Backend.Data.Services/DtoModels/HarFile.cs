@@ -6,6 +6,6 @@
 
         public string Content { get; set; }
 
-        public Folder Folder { get; set; }
+        public Path Path { get; set; }
     }
 }

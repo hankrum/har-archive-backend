@@ -1,11 +1,12 @@
-﻿using Har.Archive.Backend.Infrastructure;
+﻿using Har.Archive.Backend.Data.Domain;
+using Har.Archive.Backend.Infrastructure;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Har.Archive.Backend.Data
 {
-    public class EFRepository<T> : IEfRepository<T> where T : class
+    public class EFRepository<T> : IEfRepository<T> where T : BaseEntry
     {
         private readonly MsSqlDbContext context;
 

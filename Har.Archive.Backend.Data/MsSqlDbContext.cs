@@ -13,7 +13,7 @@ namespace Har.Archive.Backend.Data
         {
         }
 
-        public DbSet<Folder> Folders { get; set; }
+        public DbSet<Path> Paths { get; set; }
 
         public DbSet<HarFile> HarFiles { get; set; }
 
@@ -33,7 +33,7 @@ namespace Har.Archive.Backend.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Folder>().HasQueryFilter(m => EF.Property<bool>(m, "IsDeleted") == false);
+            builder.Entity<Path>().HasQueryFilter(m => EF.Property<bool>(m, "IsDeleted") == false);
 
             builder.Entity<HarFile>().HasQueryFilter(c => EF.Property<bool>(c, "IsDeleted") == false);
         }

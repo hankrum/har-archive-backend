@@ -1,6 +1,6 @@
 using Har.Archive.Backend.Api.Mappers;
 using Har.Archive.Backend.Data;
-using Har.Archive.Backend.Data.Services;
+using Har.Archive.Backend.Data.Services.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -47,11 +47,21 @@ namespace Har.Archive.Backend.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = ApplicationName, Version = "v1" });
             });
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                  "CorsPolicy",
+                  builder => builder.WithOrigins("http://localhost:4200")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials());
+            });
         }
 
         private void RegisterServices(IServiceCollection services)
         {
             services.AddTransient<IHarFileService, HarFileService>();
+            services.AddTransient<IPathService, PathService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,6 +87,8 @@ namespace Har.Archive.Backend.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 

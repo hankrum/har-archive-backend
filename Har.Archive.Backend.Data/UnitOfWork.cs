@@ -8,17 +8,17 @@ namespace Har.Archive.Backend.Data
     {
         private readonly MsSqlDbContext context;
         private readonly IEfRepository<HarFile> harFiles;
-        private readonly IEfRepository<Folder> folders;
+        private readonly IEfRepository<Path> paths;
 
         public UnitOfWork(
             MsSqlDbContext context,
             IEfRepository<HarFile> harFiles,
-            IEfRepository<Folder> folders
+            IEfRepository<Path> paths
             )
         {
             this.context = Guard.GetNotNullArgument(context, nameof(context));
             this.harFiles = Guard.GetNotNullArgument(harFiles, nameof(harFiles));
-            this.folders = Guard.GetNotNullArgument(folders, nameof(folders));
+            this.paths = Guard.GetNotNullArgument(paths, nameof(paths));
         }
 
         public IEfRepository<HarFile> HarFiles
@@ -29,15 +29,15 @@ namespace Har.Archive.Backend.Data
             }
         }
 
-        public IEfRepository<Folder> Folders
+        public IEfRepository<Path> Paths
         {
             get
             {
-                return this.folders;
+                return this.paths;
             }
         }
 
-        public async Task<int> SaveChanges()
+        public async Task<int> SaveChangesAsync()
         {
             return await context.SaveChangesAsync();
         }

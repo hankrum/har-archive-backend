@@ -8,7 +8,7 @@ namespace Har.Archive.Backend.Data
     {
         DbSet<HarFile> HarFiles { get; set; }
 
-        DbSet<Folder> Folders { get; set; }
+        DbSet<Path> Paths { get; set; }
 
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
 

@@ -7,8 +7,8 @@ namespace Har.Archive.Backend.Data
     {
         IEfRepository<HarFile> HarFiles { get; }
 
-        IEfRepository<Folder> Folders { get; }
+        IEfRepository<Path> Paths { get; }
 
-        Task<int> SaveChanges();
+        Task<int> SaveChangesAsync();
     }
 }

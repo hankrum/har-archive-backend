@@ -8,8 +8,9 @@ namespace Har.Archive.Backend.Api.Mappers
     {
         public HarArchiveMapperProfile()
         {
-            CreateMap<Domain.HarFile, Dto.HarFile>();
-            CreateMap<Domain.Folder, Dto.Folder>();
+            CreateMap<Domain.HarFile, Dto.HarFile>().ReverseMap();
+
+            CreateMap<Domain.Path, Dto.Path>().ReverseMap();
         }
     }
 }
