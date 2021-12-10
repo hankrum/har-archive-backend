@@ -1,13 +1,19 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Har.Archive.Backend.Api.Mappers;
+using Har.Archive.Backend.Api.Validators;
 using Har.Archive.Backend.Data;
 using Har.Archive.Backend.Data.Services.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace Har.Archive.Backend.Api
 {
@@ -26,9 +32,16 @@ namespace Har.Archive.Backend.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            this.RegisterAuthentication(services);
             services.AddControllers();
             this.RegisterData(services);
             this.RegisterServices(services);
+
+            services.AddFluentValidation(options =>
+             {
+                 options.RegisterValidatorsFromAssemblyContaining(typeof(HarFileValidator));
+                 options.ImplicitlyValidateChildProperties = true;
+             });
         }
 
         private void RegisterData(IServiceCollection services)
@@ -64,6 +77,28 @@ namespace Har.Archive.Backend.Api
             services.AddTransient<IPathService, PathService>();
         }
 
+        private void RegisterAuthentication(IServiceCollection services)
+        {
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration.GetValue<string>("TokenValidIssuer"),
+                        ValidAudience = Configuration.GetValue<string>("TokenValidAudience"),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("TokenSecurityKey")))
+                    };
+                });
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -84,12 +119,16 @@ namespace Har.Archive.Backend.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "HAR File Archive");
             });
 
+            app.UseCors(x => x
+                       .AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader());
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseCors();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

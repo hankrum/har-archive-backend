@@ -25,7 +25,7 @@ namespace Har.Archive.Backend.Data.Services.Services
             this.pathService = Guard.GetNotNullArgument(pathService, nameof(pathService));
         }
 
-        public async Task<IEnumerable<Dto.HarFile>> All(string path)
+        public async Task<IEnumerable<Dto.HarFile>> AllByPath(string path)
         {
             var harFilesQuery = await unitOfWork
                 .HarFiles
