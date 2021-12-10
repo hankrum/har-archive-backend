@@ -122,14 +122,14 @@ namespace Har.Archive.Backend.Api
 
             app.UseApiExceptionHandler(ExceptionHandlingExtensions.ConfigureExceptionHandling);
 
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
             app.UseCors(x => x
                        .AllowAnyOrigin()
                        .AllowAnyMethod()
                        .AllowAnyHeader());
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
