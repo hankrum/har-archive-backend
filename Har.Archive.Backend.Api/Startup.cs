@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Har.Archive.Backend.Api.Mappers;
+using Har.Archive.Backend.Api.MiddleWare.ExceptionHandling;
 using Har.Archive.Backend.Api.Validators;
 using Har.Archive.Backend.Data;
 using Har.Archive.Backend.Data.Services.Services;
@@ -118,6 +119,8 @@ namespace Har.Archive.Backend.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "HAR File Archive");
             });
+
+            app.UseApiExceptionHandler(ExceptionHandlingExtensions.ConfigureExceptionHandling);
 
             app.UseCors(x => x
                        .AllowAnyOrigin()
